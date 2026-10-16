@@ -1,0 +1,17 @@
+{
+  "name": "hammerspoon2-config",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Third-party JS libraries for Hammerspoon 2.\nRun `npm run bundle` after adding packages with `npm install <package>`.",
+  "dependencies": {},
+  "scripts": {
+    "bundle": "node bundle.js",
+    "typecheck": "bun check"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^7.0.2"
+  }
+}
