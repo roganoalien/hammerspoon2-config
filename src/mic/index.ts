@@ -12,14 +12,14 @@
 //   https://cmsj.github.io/Hammerspoon2/main/ts/modules/hs.audiodevice.html
 
 // --- State ------------------------------------------------------------------
-let mic = null; // current default input device (HSAudioDevice | null)
+let mic: HSAudioDevice | null = null; // current default input device (HSAudioDevice | null)
 
 const iconLive = HSImage.fromSymbol("mic.fill");
 const iconMuted = HSImage.fromSymbol("mic.slash.fill");
 if (iconLive) iconLive.template = true;
 if (iconMuted) iconMuted.template = true;
 
-const bar = hs.menubar.create();
+const bar: HSMenuBarItem = hs.menubar.create();
 
 // --- Helpers ----------------------------------------------------------------
 
@@ -33,15 +33,15 @@ const refresh = () => {
 	bar.setIcon(muted ? iconMuted : iconLive);
 	bar.setTooltip(`${name} — ${mic ? (muted ? "Muted" : "Live") : "unavailable"}`);
 	bar.setMenu([
-		{ title: name, disabled: true },
+		{ disabled: true, title: name },
 		{ title: "-" },
 		{
-			title: muted ? "Unmute" : "Mute",
 			disabled: !mic,
 			fn: () => toggleMute(),
+			title: muted ? "Unmute" : "Mute",
 		},
 		{ title: "-" },
-		{ title: "Reload config", fn: () => hs.reload() },
+		{ fn: () => hs.reload(), title: "Reload config" },
 	]);
 };
 
@@ -62,6 +62,7 @@ const bindMic = () => {
 			mic.off("min", onMuteChange);
 		} catch (e) {
 			/* device may be gone; ignore */
+			console.error(e);
 		}
 	}
 
@@ -71,7 +72,7 @@ const bindMic = () => {
 		try {
 			mic.on("min", onMuteChange);
 		} catch (err) {
-			console.error(`mic.js: failed to watch mute: ${err.message}`);
+			console.error(`mic.js: failed to watch mute: ${err}`);
 		}
 	}
 
@@ -90,5 +91,5 @@ bindMic();
 try {
 	hs.audiodevice.on("dIn", bindMic);
 } catch (err) {
-	console.error(`mic.js: failed to watch default input device: ${err.message}`);
+	console.error(`mic.js: failed to watch default input device: ${err}`);
 }

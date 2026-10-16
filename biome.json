@@ -1,0 +1,136 @@
+{
+	"$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+	"assist": {
+		"actions": {
+			"source": {
+				"organizeImports": "on",
+				"useSortedAttributes": "on",
+				"useSortedKeys": "on",
+				"useSortedProperties": "on"
+			}
+		},
+		"enabled": true
+	},
+	"files": {
+		"ignoreUnknown": true,
+		"includes": [
+			"**/*.ts",
+			"**/*.js",
+			"**/*.json",
+			"!compiled",
+			"!lib",
+			"!node_modules",
+			"!hammerspoon.d.ts",
+			"!bundle.js",
+			"!bun.lock",
+			"!tsconfig.json"
+		]
+	},
+	"formatter": {
+		"attributePosition": "multiline",
+		"bracketSameLine": false,
+		"bracketSpacing": true,
+		"enabled": true,
+		"expand": "auto",
+		"formatWithErrors": false,
+		"indentStyle": "tab",
+		"lineEnding": "lf",
+		"lineWidth": 100,
+		"useEditorconfig": true
+	},
+	"javascript": {
+		"formatter": {
+			"arrowParentheses": "always",
+			"enabled": true,
+			"jsxQuoteStyle": "double",
+			"quoteProperties": "asNeeded",
+			"quoteStyle": "double",
+			"semicolons": "always",
+			"trailingCommas": "all"
+		},
+		"globals": [
+			"hs",
+			"console",
+			"require",
+			"HSImage",
+			"HSColor",
+			"HSFont",
+			"HSRect",
+			"HSPoint",
+			"HSSize",
+			"HSWindow",
+			"HSApplication",
+			"HSAudioDevice",
+			"HSMenuBarItem",
+			"HSEventTapEvent",
+			"HSTimer"
+		]
+	},
+	"linter": {
+		"enabled": true,
+		"rules": {
+			"a11y": {
+				"recommended": true
+			},
+			"complexity": {
+				"noExcessiveLinesPerFunction": "off",
+				"noForEach": "warn",
+				"noUselessEmptyExport": "error",
+				"noUselessFragments": "error",
+				"noUselessLabel": "error",
+				"noUselessRename": "error",
+				"noUselessSwitchCase": "error",
+				"noUselessTernary": "error",
+				"recommended": true,
+				"useArrowFunction": "warn"
+			},
+			"correctness": {
+				"noChildrenProp": "error",
+				"noUndeclaredVariables": "info",
+				"noUnreachable": "error",
+				"noUnusedImports": "warn",
+				"noUnusedVariables": "warn",
+				"noVoidTypeReturn": "warn",
+				"recommended": true,
+				"useIsNan": "error"
+			},
+			"nursery": {
+				"recommended": true,
+				"useSortedClasses": "off"
+			},
+			"performance": {
+				"recommended": true
+			},
+			"preset": "recommended",
+			"security": {
+				"noDangerouslySetInnerHtml": "warn",
+				"noDangerouslySetInnerHtmlWithChildren": "error",
+				"recommended": true
+			},
+			"style": {
+				"noNonNullAssertion": "off",
+				"noUselessElse": "error",
+				"recommended": true,
+				"useConst": "error",
+				"useNamingConvention": "off"
+			},
+			"suspicious": {
+				"noAlert": "warn",
+				"noConsole": "off",
+				"noDoubleEquals": "error",
+				"noDuplicateObjectKeys": "error",
+				"noEmptyInterface": "error",
+				"noExplicitAny": "warn",
+				"noUnknownAtRules": "off",
+				"recommended": true,
+				"useAwait": "error",
+				"useIsArray": "error"
+			}
+		}
+	},
+	"vcs": {
+		"clientKind": "git",
+		"enabled": true,
+		"useIgnoreFile": true
+	}
+}

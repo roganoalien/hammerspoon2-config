@@ -1,26 +1,10 @@
-// Hammerspoon 2 configuration
+// init.js — Hammerspoon entry point (plain JavaScript, loaded directly by Hammerspoon)
 //
-// This file is loaded on startup, and reloaded whenever you choose "Reload Config"
-// from the menu bar icon.
+// Do NOT put real config here. The actual configuration is written in
+// TypeScript (init.ts) and compiled to ./compiled/init.js by `tsc`.
+// This bootstrap simply loads that compiled output.
 //
-// Full API documentation: https://cmsj.github.io/Hammerspoon2
-// You can also browse it locally at any time with: hs.docs.show()
-//
-// See also:
-// - https://cmsj.github.io/Hammerspoon2/main/js/getting-started.html
-// - https://cmsj.github.io/Hammerspoon2/main/js/migration-guide.html
-require("./capslock");
-require("./keyboardLayout");
-require("./mic");
+// Build once:   npm run build
+// Watch:        npm run watch   (recompiles on save; then reload Hammerspoon)
 
-hs.notify.show("Hammerspoon 2", "Config loaded successfully.");
-
-// Example: bind cmd+alt+h to show a notification.
-// Uncomment the lines below and reload your config to try it out.
-//
-// const helloHotkey = hs.hotkey.bind(["command", "control", "option", "shift"], "l", () => {
-//   hs.notify.show("Hammerspoon 2", "Hello from your config!")
-// })
-//
-// Note: capture the return value in a variable that lives as long as your config
-//       does, otherwise it will simply stop firing after the next garbage collection.
+require("./compiled/init.js");

@@ -1,48 +1,73 @@
 {
 	"compilerOptions": {
-		// Target modern JavaScript
-		"target": "ES2025",
-		"module": "commonjs",
+		// --- Language / output target ---------------------------------------
+		// Hammerspoon runs a modern JavaScriptCore engine, so target modern JS.
+		"target": "ESNext",
 		"lib": [
-			"ES2025"
+			"ESNext"
 		],
-		// Output directory for compiled JavaScript
+		// --- Module system --------------------------------------------------
+		// IMPORTANT: Hammerspoon loads compiled files via its own CommonJS
+		// require(). NodeNext resolution + a CommonJS package.json (no
+		// "type": "module") makes tsc emit CommonJS (module.exports / require),
+		// which is exactly what Hammerspoon can load — while still giving us
+		// modern module resolution and import/export support in .ts sources.
+		"module": "nodenext",
+		"moduleResolution": "nodenext",
+		// Modern interop + JSON imports
+		"esModuleInterop": true,
+		"resolveJsonModule": true,
+		"verbatimModuleSyntax": false,
+		// --- Output ---------------------------------------------------------
 		"outDir": "./compiled",
-		// Strict type checking
+		"sourceMap": true,
+		// --- Path aliases ---------------------------------------------------
+		// Any folder src/<name>/index.ts is importable as `@<name>`.
+		// e.g. `import "@mic"` -> ./src/mic/index.ts. Add a new folder with an
+		// index.ts and it works automatically — no tsconfig edit needed.
+		// (The `@/*` entry additionally allows `@/<name>/<file>` deep imports.)
+		// NOTE: tsc only resolves these for TYPE CHECKING — it does NOT rewrite
+		// them in the emitted .js. The compiled output keeps `require("@mic")`,
+		// which Hammerspoon's runtime cannot resolve on its own. You'll need a
+		// resolver/rewrite step (e.g. tsc-alias) or manual handling at load
+		// time — which you've said you'll take care of yourself.
+		"paths": {
+			"@*": [
+				"./src/*/index.ts"
+			],
+			"@/*": [
+				"./src/*"
+			]
+		},
+		// --- Strictness (modern defaults) -----------------------------------
 		"strict": true,
-		"noImplicitAny": true,
-		"strictNullChecks": true,
-		"strictFunctionTypes": true,
-		"strictBindCallApply": true,
-		"strictPropertyInitialization": true,
-		"noImplicitThis": true,
-		"alwaysStrict": true,
-		// Additional checks
 		"noUnusedLocals": true,
 		"noUnusedParameters": true,
 		"noImplicitReturns": true,
 		"noFallthroughCasesInSwitch": true,
-		// Module resolution
-		"moduleResolution": "node",
-		"esModuleInterop": true,
-		"allowSyntheticDefaultImports": true,
-		"resolveJsonModule": true,
-		// Source maps for debugging
-		"sourceMap": true,
-		// Skip lib check for faster compilation
-		"skipLibCheck": true,
+		"noUncheckedIndexedAccess": true,
 		"forceConsistentCasingInFileNames": true,
-		// Include Hammerspoon type definitions
+		// Hammerspoon's d.ts is large and generated; don't type-check it.
+		"skipLibCheck": true,
+		// Don't pull in @types/* automatically (we rely on the ambient
+		// Hammerspoon globals and our own globals.d.ts instead).
 		"types": []
 	},
-	// Include your TypeScript config files
+	// Explicitly load the ambient Hammerspoon globals so `hs`, `console`,
+	// `HSImage`, etc. resolve everywhere (fixes "undeclared variable: hs"),
+	// plus our small shim that types CommonJS `require()`.
+	"files": [
+		"hammerspoon.d.ts",
+		"globals.d.ts"
+	],
+	// Your own TypeScript sources.
 	"include": [
 		"*.ts",
 		"src/**/*.ts"
 	],
-	// Exclude output and dependencies
 	"exclude": [
 		"node_modules",
-		"compiled"
+		"compiled",
+		"lib"
 	]
 }

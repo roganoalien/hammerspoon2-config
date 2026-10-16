@@ -1,17 +1,24 @@
 {
-  "name": "hammerspoon2-config",
-  "version": "1.0.0",
-  "private": true,
-  "description": "Third-party JS libraries for Hammerspoon 2.\nRun `npm run bundle` after adding packages with `npm install <package>`.",
-  "dependencies": {},
-  "scripts": {
-    "bundle": "node bundle.js",
-    "typecheck": "bun check"
-  },
-  "devDependencies": {
-    "@types/bun": "latest"
-  },
-  "peerDependencies": {
-    "typescript": "^7.0.2"
-  }
+	"dependencies": {},
+	"description": "Hammerspoon 2 config. TypeScript sources compile to ./compiled; init.js bootstraps the compiled output. Third-party JS libs are bundled with `npm run bundle`.",
+	"devDependencies": {
+		"@biomejs/biome": "2.5.15",
+		"@types/bun": "latest",
+		"tsc-alias": "1.9.7",
+		"typescript": "5.9.3"
+	},
+	"name": "hammerspoon2-config",
+	"private": true,
+	"scripts": {
+		"build": "tsc && tsc-alias",
+		"bundle": "node bundle.js",
+		"check": "biome check --write .",
+		"clean": "rm -rf compiled",
+		"dev": "tsc --watch --preserveWatchOutput & tsc-alias --watch",
+		"format": "biome format --write .",
+		"lint": "biome lint .",
+		"typecheck": "tsc --noEmit",
+		"watch": "tsc --watch"
+	},
+	"version": "1.0.0"
 }
