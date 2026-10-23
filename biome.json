@@ -58,6 +58,8 @@
 			"HSRect",
 			"HSPoint",
 			"HSSize",
+			"HSUIWindow",
+			"HSHotkey",
 			"HSWindow",
 			"HSApplication",
 			"HSAudioDevice",

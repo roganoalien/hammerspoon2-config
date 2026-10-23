@@ -19,30 +19,30 @@ layBar.setMenu([
 ]);
 
 // Functions
-const handleKeycodes = () => {
-	// Gets current keycode layout & method
-	// Sets menubar item title to the layout or method
-	const code = hs.keycodes.currentLayout();
-	const method = hs.keycodes.currentMethod();
+// const handleKeycodes = () => {
+// 	// Gets current keycode layout & method
+// 	// Sets menubar item title to the layout or method
+// 	const code = hs.keycodes.currentLayout();
+// 	const method = hs.keycodes.currentMethod();
 
-	if (code === "Latin American" && method === undefined) {
-		layBar.title = "es";
-	}
+// 	if (code === "Latin American" && method === undefined) {
+// 		layBar.title = "es";
+// 	}
 
-	if (code === "ABC") {
-		if (method === undefined) {
-			layBar.title = "en";
-		} else {
-			layBar.title = "jp";
-		}
-	}
-};
+// 	if (code === "ABC") {
+// 		if (method === undefined) {
+// 			layBar.title = "en";
+// 		} else {
+// 			layBar.title = "jp";
+// 		}
+// 	}
+// };
 
-handleKeycodes();
+// handleKeycodes();
 
 const refreshMenuBar = () => {
 	// Refreshes the menu of the menubar item
-	handleKeycodes();
+	// handleKeycodes();
 	layBar.setMenu([
 		{ fn: () => hs.reload(), title: "Reload config" },
 		{ checked: true, disabled: true, title: `Status: ${globalMenuState}` },
@@ -85,9 +85,9 @@ const onActivate = () => {
 hs.hotkey.bind(["ctrl", "cmd", "alt"], "k", setState);
 
 // Listeners
-hs.keycodes.on("change", () => {
-	handleKeycodes();
-});
+// hs.keycodes.on("change", () => {
+// 	handleKeycodes();
+// });
 
 hs.application.on("didActivate", onActivate);
 

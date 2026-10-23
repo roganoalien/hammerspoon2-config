@@ -8,9 +8,10 @@
 // - https://cmsj.github.io/Hammerspoon2/main/js/getting-started.html
 // - https://cmsj.github.io/Hammerspoon2/main/js/migration-guide.html
 // NOTE: this file compiles to ./compiled/init.js. These are side-effect
-import "@capslock";
+
+// import "@capslock";
 import "@keyboardLayout";
-import "@mic";
+// import "@mic";
 import "@windowManager";
 
 hs.notify.show("Hammerspoon 2", "Config loaded successfully.", () => {
