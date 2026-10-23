@@ -70,7 +70,7 @@ const onActivate = () => {
 	if (globalMenuState === "locked") return;
 	const win = hs.window.focusedWindow();
 	if (win) {
-		const app = win.application?.title;
+		const app = win.application?.name;
 		const valid = isAppAllowed(app as string);
 		// CHANGE KEYBOARD LAYOUT
 		if (valid) {
