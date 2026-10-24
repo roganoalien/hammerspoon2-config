@@ -40,8 +40,6 @@ const refresh = () => {
 			fn: () => toggleMute(),
 			title: muted ? "Unmute" : "Mute",
 		},
-		{ title: "-" },
-		{ fn: () => hs.reload(), title: "Reload config" },
 	]);
 };
 
@@ -92,4 +90,43 @@ try {
 	hs.audiodevice.on("dIn", bindMic);
 } catch (err) {
 	console.error(`mic.js: failed to watch default input device: ${err}`);
+}
+
+// --- Intercept the mic / F5 key (keyCode 176) -------------------------------
+// This key normally triggers macOS Dictation. We tap it, suppress it with
+// `consume`, and toggle the mic mute instead. A modify tap (listenOnly=false)
+// is required so the return value can suppress the event. Requires
+// Accessibility permission. The tap is NOT garbage collected — keep the
+// reference and removeWatcher() if you ever tear it down.
+const MIC_KEYCODE = 176;
+let micKeyTap: HSEventTap | null = null;
+
+try {
+	const keyDown = hs.eventtap.eventTypes.keyDown;
+	const systemDefined = hs.eventtap.eventTypes.systemDefined;
+	const types = [keyDown, systemDefined].filter((t): t is number => t !== undefined);
+
+	micKeyTap = hs.eventtap.addWatcher(
+		types,
+		(event) => {
+			if (event.keyCode === MIC_KEYCODE) {
+				// Toggle once, on the key-down edge only, to avoid double-firing
+				// on the matching key-up event.
+				const sk = event.systemKey;
+				const isDown = sk ? sk.isDown : true;
+				if (isDown) toggleMute();
+				return hs.eventtap.consume; // block dictation
+			}
+			return hs.eventtap.emit; // let everything else through
+		},
+		false, // modify tap — required to consume
+	);
+
+	if (micKeyTap) {
+		micKeyTap.start();
+	} else {
+		console.error("mic.js: could not create mic-key tap (Accessibility permission?)");
+	}
+} catch (err) {
+	console.error(`mic.js: failed to start mic-key tap: ${err}`);
 }
