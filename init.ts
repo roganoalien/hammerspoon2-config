@@ -1,17 +1,11 @@
 // Hammerspoon 2 configuration file init NEEDS COMPILATION
-//
-//
-// Full API documentation: https://cmsj.github.io/Hammerspoon2
+// Full API documentation: https://cmsj.github.io/Hammerspoon2/main/js/
 // You can also browse it locally at any time with: hs.docs.show()
 //
-// See also:
-// - https://cmsj.github.io/Hammerspoon2/main/js/getting-started.html
-// - https://cmsj.github.io/Hammerspoon2/main/js/migration-guide.html
-// NOTE: this file compiles to ./compiled/init.js. These are side-effect
 
-// import "@capslock";
+import "@capslock";
 import "@keyboardLayout";
-// import "@mic";
+import "@mic";
 import "@windowManager";
 
 hs.notify.show("Hammerspoon 2", "Config loaded successfully.", () => {
