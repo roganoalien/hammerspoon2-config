@@ -1,21 +1,15 @@
 # hammerspoon2-config
 
-To install dependencies:
+This is a HammerSpoon 2 project using Bun. To install any module you need to install with `bun add <package_name>`. 
 
-```bash
-bun install
+Since everything is written with TypeScript and Swift does not work with it it needs to be compiled using:
+
+```shell
+bun run dev
 ```
 
-To run:
+If you're running `dev` script then there's no need to run build but you can run it just as a double check with:
 
-```bash
-bun run 
+```shell
+bun run build
 ```
-
-To type check:
-
-```bash
-bun check
-```
-
-This project was created using `bun init` in bun v1.4.3. [Bun](https://bun.com) is a fast all-in-one JavaScript runtime.
