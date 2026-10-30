@@ -4,8 +4,9 @@
 //       muted  -> "mic.slash"
 //       live   -> "mic.fill"
 //   - Click the item to toggle mute.
-//   - Reacts live to mute changes via the per-device "min" event, and
-//     re-binds automatically when the default input device changes ("dIn").
+//   - Reacts live to mute changes via the per-device "min" event and to input
+//     volume changes via the per-device "vmin" event, and re-binds
+//     automatically when the default input device changes ("dIn").
 //
 // Docs:
 //   https://cmsj.github.io/Hammerspoon2/main/ts/classes/HSAudioDevice.html
@@ -26,14 +27,36 @@ const bar: HSMenuBarItem = hs.menubar.create();
 // Is the current mic muted? (false if no mic / no mutable input)
 const isMuted = () => (mic ? mic.inputMuted : false);
 
+// Current input volume as a 0–100 percentage, or null if unavailable.
+const inputVolumePercent = (): number | null => {
+	if (!mic) return null;
+	const vol = mic.inputVolume; // 0.0–1.0, or null if unsupported
+	if (vol === null || vol === undefined) return null;
+	return Math.round(vol * 100);
+};
+
 const refresh = () => {
 	const muted = isMuted();
 	const name = mic ? mic.name : "No input device";
+	const pct = inputVolumePercent();
+
+	// Build a human-readable status string.
+	let status: string;
+	if (!mic) {
+		status = "unavailable";
+	} else if (muted) {
+		status = "Muted";
+	} else if (pct !== null) {
+		status = `Live — ${pct}%`;
+	} else {
+		status = "Live";
+	}
 
 	bar.setIcon(muted ? iconMuted : iconLive);
-	bar.setTooltip(`${name} — ${mic ? (muted ? "Muted" : "Live") : "unavailable"}`);
+	bar.setTooltip(`${name} — ${status}`);
 	bar.setMenu([
 		{ disabled: true, title: name },
+		{ disabled: true, title: `Status: ${status}` },
 		{ title: "-" },
 		{
 			disabled: !mic,
@@ -52,12 +75,16 @@ const toggleMute = () => {
 // Called by the per-device "min" (input mute changed) event.
 const onMuteChange = () => refresh();
 
+// Called by the per-device "vmin" (input volume changed) event.
+const onVolumeChange = () => refresh();
+
 // (Re)bind listeners to whatever the current default input device is.
 const bindMic = () => {
 	// Detach from the previous device if we had one.
 	if (mic) {
 		try {
 			mic.off("min", onMuteChange);
+			mic.off("vmin", onVolumeChange);
 		} catch (e) {
 			/* device may be gone; ignore */
 			console.error(e);
@@ -71,6 +98,11 @@ const bindMic = () => {
 			mic.on("min", onMuteChange);
 		} catch (err) {
 			console.error(`mic.js: failed to watch mute: ${err}`);
+		}
+		try {
+			mic.on("vmin", onVolumeChange);
+		} catch (err) {
+			console.error(`mic.js: failed to watch input volume: ${err}`);
 		}
 	}
 
